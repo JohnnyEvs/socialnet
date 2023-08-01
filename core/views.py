@@ -4,4 +4,11 @@ from django.shortcuts import render, HttpResponse
 def homepage(request):
     return HttpResponse("Hello world!")
 
+def contacts(request):
+    return HttpResponse("Наши контакты")
+
+def about_us(request):
+    return HttpResponse("Информация о нас!")
+
+
 
