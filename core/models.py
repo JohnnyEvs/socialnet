@@ -77,7 +77,7 @@ class Comment(models.Model):
         return self.comment_text[:20]
 
 class Short(models.Model):
-    user = models.ForeignKey(Post, verbose_name='Posted by', on_delete=models.CASCADE)
+    user = models.ForeignKey(User, verbose_name='Posted by', on_delete=models.CASCADE)
     video = models.FileField('Video', null=True, blank=True, upload_to='post_videos/')
     created_at = models.DateTimeField('Upload data', auto_now_add=True)
     views_qty = models.PositiveIntegerField('Views', default=0)
@@ -91,7 +91,7 @@ class Short(models.Model):
 
 
 class SavedPosts(models.Model):
-    user = models.OneToOneField(User,verbose_name='User', on_delete=models.CASCADE)
+    user = models.OneToOneField(User, verbose_name='User', on_delete=models.CASCADE)
     post = models.ManyToManyField(Post,
                                   verbose_name='Saved post',
                                   related_name='saved_posts')
