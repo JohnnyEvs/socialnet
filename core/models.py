@@ -16,9 +16,20 @@ class Post(models.Model):
 
     name = models.CharField('Header',max_length=80)
     description = models.TextField('Description', null=True)
-    photo = models.ImageField('Photo', null=True, blank=True)
-    status = models.CharField('Status',max_length=200, choices=STATUS_CHOICES)
-
+    photo = models.ImageField('Photo', null=True, blank=True, upload_to='post_images/')
+    status = models.CharField('Status',max_length=200, choices=STATUS_CHOICES, default="Posted")
+    creator=models.ForeignKey(
+        to=User,
+        on_delete=models.SET_NULL,
+        null=True,
+        blank=False,
+        verbose_name="Post author",
+        related_name='Posts'
+    )
+    category = models.ManyToManyField(
+        to='Category', blank=True, verbose_name='Categories',
+    )
+    likes = models.PositiveIntegerField('Likes', default=0)
     def __str__(self):
         return f'{self.name} - {self.status}'
 
@@ -37,14 +48,54 @@ class Category(models.Model):
     )
 
     name = models.CharField(max_length=50)
-    rating = models.PositiveSmallIntegerField(choices=RATING_CHOICES, null=True)
+    rating = models.PositiveSmallIntegerField(choices=RATING_CHOICES, null=True, blank=True)
 
     def __str__(self):
         return f'{self.name} - {self.rating}'
 
-class Meta():
-    verbose_name = 'Post'
-    verbose_name_plural = 'Posts'
+    class Meta:
+        verbose_name = 'Category'
+        verbose_name_plural = 'Categories'
 
+class Comment(models.Model):
+    post = models.ForeignKey(
+        to=Post,
+        on_delete=models.CASCADE,
+    )
+    comment_text = models.TextField()
+    likes_qty = models.IntegerField (default=0)
+    created_at = models.DateTimeField(auto_now_add=True)
+
+    def __str__(self):
+        return self.comment_text[:20]
+    class Meta:
+        verbose_name = 'Comment'
+        verbose_name_plural = 'Comments'
+        ordering = ['created_at']
+
+class Short(models.Model):
+    user = models.ForeignKey(to=Post, on_delete=models.CASCADE,)
+    video = models.FileField('Video', null=True, blank=True, upload_to='post_videos/')
+    created_at = models.DateTimeField('Upload data', auto_now_add=True)
+    views_qty = models.PositiveIntegerField ('Views', default=0)
+
+    def __str__(self):
+        return f'{self.video} - {self.created_at}'
+
+    class Meta:
+        verbose_name = 'Video'
+        verbose_name_plural = 'Videos'
+
+
+class SavedPosts(models.Model):
+    user = models.ForeignKey
+    post = models.ManyToManyField
+
+    def __str__(self):
+        return f'{self.user} - {self.post}'
+
+    class Meta:
+        verbose_name = 'Saved Post'
+        verbose_name_plural = 'Saved Posts'
 
 

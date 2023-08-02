@@ -3,3 +3,5 @@ venv/
 *.рус
 __pycache__/
 .idea/
+media/
+static/
