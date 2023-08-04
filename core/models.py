@@ -1,12 +1,14 @@
 from django.db import models
 from django.contrib.auth.models import User
 
+
 # Create your models here.
 
 class Profile(models.Model):
     user = models.OneToOneField(to=User, on_delete=models.CASCADE)
-    nickname = models.CharField(max_length = 55)
+    nickname = models.CharField(max_length=55)
     description = models.TextField(null=True, blank=True)
+
 
 class Post(models.Model):
     STATUS_CHOICES = (
@@ -14,11 +16,11 @@ class Post(models.Model):
         ('Unposted', 'Unposted')
     )
 
-    name = models.CharField('Header',max_length=80)
+    name = models.CharField('Header', max_length=80)
     description = models.TextField('Description', null=True)
     photo = models.ImageField('Photo', null=True, blank=True, upload_to='post_images/')
-    status = models.CharField('Status',max_length=200, choices=STATUS_CHOICES, default="Posted")
-    creator=models.ForeignKey(
+    status = models.CharField('Status', max_length=200, choices=STATUS_CHOICES, default="Posted")
+    creator = models.ForeignKey(
         to=User,
         on_delete=models.SET_NULL,
         null=True,
@@ -33,6 +35,7 @@ class Post(models.Model):
 
     def __str__(self):
         return f'{self.name} - {self.status}'
+
 
 class Category(models.Model):
     RATING_CHOICES = (
@@ -54,6 +57,7 @@ class Category(models.Model):
     class Meta:
         verbose_name = 'Category'
         verbose_name_plural = 'Categories'
+
     def __str__(self):
         return f'{self.name} - {self.rating}'
 
@@ -64,9 +68,8 @@ class Comment(models.Model):
         on_delete=models.CASCADE,
     )
     comment_text = models.TextField()
-    likes_qty = models.IntegerField (default=0)
+    likes_qty = models.IntegerField(default=0)
     created_at = models.DateTimeField(auto_now_add=True)
-
 
     class Meta:
         verbose_name = 'Comment'
@@ -76,9 +79,10 @@ class Comment(models.Model):
     def __str__(self):
         return self.comment_text[:20]
 
+
 class Short(models.Model):
     user = models.ForeignKey(User, verbose_name='Posted by', on_delete=models.CASCADE)
-    video = models.FileField('Video', null=True, blank=True, upload_to='post_videos/')
+    video = models.FileField('Video', null=True, blank=False, upload_to='post_videos/')
     created_at = models.DateTimeField('Upload data', auto_now_add=True)
     views_qty = models.PositiveIntegerField('Views', default=0)
 
@@ -102,4 +106,3 @@ class SavedPosts(models.Model):
 
     def __str__(self):
         return f'{self.user} - {self.post}'
-

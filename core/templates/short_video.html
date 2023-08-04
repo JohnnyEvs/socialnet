@@ -1,0 +1,23 @@
+<h1> SHORT </h1>
+{% for short in short_video_object %}
+
+<div> <h2>Created at: {{ short.created_at }}</h2></div>
+
+<div> <h2>Name: {{ short.video}}</h2> </div>
+
+<div><h2> Uploaded by: {{ short.user}}</h2></div>
+
+<div> <h2>Views: {{ short.views_qty }}</h2></div>
+
+    {{ short.video }}
+
+    {% for short_video in short.videofile_set.all %}
+        <video width="320" height="240" controls src="{{ post_videos.file.url }}">
+          Your browser does not support the video tag.
+        </video>
+    {%  endfor %}
+
+{%  endfor %}
+
+
+

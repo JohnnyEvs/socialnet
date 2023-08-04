@@ -16,9 +16,7 @@ Including another URLconf
 """
 from django.contrib import admin
 from django.urls import path
-from core.views import homepage
-from core.views import contacts
-from core.views import about_us
+from core.views import *
 from django.conf import settings
 from django.conf.urls.static import static
 urlpatterns = [
@@ -26,6 +24,11 @@ urlpatterns = [
     path('', homepage),
     path('contacts/', contacts),
     path('about_us/', about_us),
+    path('posts/<int:id>', post_detail),
+    path('profile/<int:id>', profile_detail, name='profile'),
+    path('category_info/<int:id>', category_detail),
+    path('short_video/', short_video),
+
 
 ]
 

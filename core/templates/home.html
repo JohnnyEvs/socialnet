@@ -1,0 +1,33 @@
+<h1>    Hello World! </h1>
+<div> <h2>It's homepage </h2></div>
+<h3>{{ name }}</h3>
+
+<div>
+    <a href="/profile/{{request.user.profile.id}}">
+        PROFILE {{ request.user.username}}
+    </a>
+</div>
+
+<div> {{ request.user }} </div>
+
+<h4> POSTS </h4>
+{% for post in posts %}
+    <div>
+        <a href="/posts/{{ post.id }}">
+        {{post.id}} - {{post.name}}</a>
+    </div>
+{% endfor %}
+
+<h2> CATEGORIES </h2>
+
+    <div>
+        <a href="/category_info/">CATEGORY</a>
+    </div>
+
+<h4> SHORTS </h4>
+
+    <div>
+        <a href="/short_video/">Shorts</a>
+    </div>
+
+
