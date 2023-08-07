@@ -1,33 +1,53 @@
-<h1>    Hello World! </h1>
-<div> <h2>It's homepage </h2></div>
-<h3>{{ name }}</h3>
-
-<div>
-    <a href="/profile/{{request.user.profile.id}}">
-        PROFILE {{ request.user.username}}
-    </a>
-</div>
-
-<div> {{ request.user }} </div>
-
-<h4> POSTS </h4>
-{% for post in posts %}
-    <div>
-        <a href="/posts/{{ post.id }}">
-        {{post.id}} - {{post.name}}</a>
-    </div>
-{% endfor %}
-
-<h2> CATEGORIES </h2>
+<!DOCTYPE html>
+{% load static %}
+<html>
+    <head>
+        <title> SOCIAL NET</title>
+        <link rel="stylesheet" href="{% static 'main.css' %}">
+    </head>
+    <a href="/">MAIN |</a>
+    <a href="{% url 'shorts-list' %}">Shorts |</a>
+    <a href="{% url 'posts' %}">Posts |</a>
+    <a href="{% url 'saved_post_list' %}">Saved posts |</a>
+    <body>
+    <h1>    Hello World! </h1>
+    <div> <h2>It's homepage </h2></div>
+    <h3>{{ name }}</h3>
 
     <div>
-        <a href="/category_info/">CATEGORY</a>
+        <a href="/profile/{{request.user.profile.id}}">
+            PROFILE {{ request.user.username}}
+        </a>
     </div>
 
-<h4> SHORTS </h4>
+    <div> {{ request.user }} </div>
 
-    <div>
-        <a href="/short_video/">Shorts</a>
-    </div>
+    <h4> POSTS </h4>
+    <ol>
+    {% for post in posts %}
+        <li>
+        <div>
+            <a href="/posts/{{ post.id }}">
+            {{post.name}}</a>
+
+        </div>
+        </li>
+    {% endfor %}
+    </ol>
+
+    <h2> CATEGORIES </h2>
+
+        <div>
+            <a href="/category_info/">CATEGORY</a>
+        </div>
+
+    <h4> SHORTS </h4>
+
+        <div>
+            <a href="{% url 'shorts-list' %}">Shorts</a>
+        </div>
+
+    </body>
+</html>
 
 

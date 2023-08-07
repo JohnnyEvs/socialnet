@@ -12,19 +12,11 @@
     <body>
 
 
+<h2> CATEGORIES </h2>
 
-<h2> POST </h2>
-<div> Author:
-    <a href="{% url 'user_posts' post.creator.id %}">
-       {{ post.creator.username }}
-    </a>
-</div>
+<div> CATEGORY {{ category_lst.name }} </div>
 
-<div> <h3> HEADER {{ post.name }} </h3> </div>
+<div> RATING {{ category_lst.rating }}</div>
 
-<img src=" {{post.photo.url }}" height="200px">
-
-<div> <h4> DESCRIPTION {{ post.description }} </h4> </div>
-
-<div> Likes {{ post.likes }}</div>
-
+</body>
+</html>

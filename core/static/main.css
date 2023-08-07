@@ -1,0 +1,15 @@
+h1 {
+    color: white;
+    background: #00009c;
+}
+
+.post {
+    height: 200px;
+}
+.post img{
+    height: 150px;
+}
+
+.post:hover{
+    background-color: #ddd;
+}

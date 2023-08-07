@@ -24,10 +24,15 @@ urlpatterns = [
     path('', homepage),
     path('contacts/', contacts),
     path('about_us/', about_us),
-    path('posts/<int:id>', post_detail),
-    path('profile/<int:id>', profile_detail, name='profile'),
-    path('category_info/<int:id>', category_detail),
-    path('short_video/', short_video),
+    path('posts/<int:id>/', post_detail),
+    path('profile/<int:id>/', profile_detail, name='profile'),
+    path('category_info/', category_list),
+    path('category_info/<int:id>/', category_detail),
+    path('short_video/', short_video, name='shorts-list'),
+    path('short_lst/<int:id>/', short_list),
+    path('saved_post_list/', saved_post_list, name='saved_post_list'),
+    path('<int:user_id>/', user_post, name='user_posts'),
+    path('posts/', post_list, name='posts'),
 
 
 ]

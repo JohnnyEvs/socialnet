@@ -1,0 +1,8 @@
+
+
+{% for short in short_lst %}
+<div>
+  <a href="{% url 'short_list' short.id %}">
+</a>
+</div>
+{% endfor %}

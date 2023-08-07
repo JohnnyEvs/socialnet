@@ -100,6 +100,8 @@ class SavedPosts(models.Model):
                                   verbose_name='Saved post',
                                   related_name='saved_posts')
 
+
+
     class Meta:
         verbose_name = 'Saved Post'
         verbose_name_plural = 'Saved Posts'

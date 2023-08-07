@@ -1,3 +1,6 @@
+{% load static %}
+<link rel="stylesheet" href="{% static 'main.css' %}">
+
 <!DOCTYPE html>
 {% load static %}
 <html>
@@ -12,19 +15,22 @@
     <body>
 
 
+{% for post in posts %}
 
-<h2> POST </h2>
-<div> Author:
-    <a href="{% url 'user_posts' post.creator.id %}">
-       {{ post.creator.username }}
-    </a>
+<div class="post">
+
+<h2> POSTS </h2>
+
+<div> POST: {{ post.name }} </div>
+
+<div> AUTHOR {{ post.creator }}</div>
+
 </div>
+<div class="post">
 
-<div> <h3> HEADER {{ post.name }} </h3> </div>
+  <a href="/posts/">
+    {{ post.name }} </a>
+{% endfor %}
+  </div>
 
-<img src=" {{post.photo.url }}" height="200px">
-
-<div> <h4> DESCRIPTION {{ post.description }} </h4> </div>
-
-<div> Likes {{ post.likes }}</div>
 
