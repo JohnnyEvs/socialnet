@@ -1,22 +1,12 @@
-<!DOCTYPE html>
-{% load static %}
-<html>
-    <head>
-        <title> SOCIAL NET</title>
-        <link rel="stylesheet" href="{% static 'main.css' %}">
-    </head>
-    <a href="/">MAIN |</a>
-    <a href="{% url 'shorts-list' %}">Shorts |</a>
-    <a href="{% url 'posts' %}">Posts |</a>
-    <a href="{% url 'saved_post_list' %}">Saved posts |</a>
-    <body>
+{% extends 'base.html' %}
 
+{% block content %}
 
-
-
-
-<h1> SHORT </h1>
+<div> <h1 class="container p-2 my-5 bg-dark text-white">SHORT </h1> </div>
 {% for short in short_video_object %}
+
+<div class="alert alert-secondary">
+  <strong>
 
 <div> <h2>Created at: {{ short.created_at }}</h2></div>
 
@@ -25,6 +15,9 @@
 <div><h2> Uploaded by: {{ short.user}}</h2></div>
 
 <div> <h2>Views: {{ short.views_qty }}</h2></div>
+
+  </strong>
+</div>
 
     {{ short.video }}
 
@@ -35,7 +28,8 @@
     {%  endfor %}
 
 {%  endfor %}
-</body>
-</html>
+
+
+{% endblock %}
 
 

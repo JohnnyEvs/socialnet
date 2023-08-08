@@ -1,17 +1,13 @@
-<!DOCTYPE html>
-{% load static %}
-<html>
-    <head>
-        <title> SOCIAL NET</title>
-        <link rel="stylesheet" href="{% static 'main.css' %}">
-    </head>
-    <a href="/">MAIN |</a>
-    <a href="{% url 'shorts-list' %}">Shorts |</a>
-    <a href="{% url 'posts' %}">Posts |</a>
-    <a href="{% url 'saved_post_list' %}">Saved posts |</a>
-    <body>
-    <h1>    Hello World! </h1>
-    <div> <h2>It's homepage </h2></div>
+{% extends 'base.html' %}
+
+{% block content %}
+
+    <h1   class="alert alert-dark">
+        <strong><center>Hello World! This is socialnet!</center></strong> </h1>
+    <div>
+        <h1><span class="badge bg-secondary"> Start page </span></h1>
+    </div>
+
     <h3>{{ name }}</h3>
 
     <div>
@@ -47,7 +43,8 @@
             <a href="{% url 'shorts-list' %}">Shorts</a>
         </div>
 
-    </body>
-</html>
+
+
+{% endblock %}
 
 

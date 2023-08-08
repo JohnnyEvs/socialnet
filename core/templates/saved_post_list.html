@@ -1,22 +1,10 @@
-{% load static %}
-<link rel="stylesheet" href="{% static 'main.css' %}">
+{% extends 'base.html' %}
 
-<!DOCTYPE html>
-{% load static %}
-<html>
-    <head>
-        <title> SOCIAL NET</title>
-        <link rel="stylesheet" href="{% static 'main.css' %}">
-    </head>
-    <a href="/">MAIN |</a>
-    <a href="{% url 'shorts-list' %}">Shorts |</a>
-    <a href="{% url 'posts' %}">Posts |</a>
-    <a href="{% url 'saved_post_list' %}">Saved posts |</a>
-    <body>
+{% block content %}
 
 
 
-<h1> SAVED POSTS</h1>
+<div> <h1 class="container p-2 my-5 bg-dark text-white">SAVED POSTS</h1></div>
 
 {% for post in posts %}
 <div class="post"> </div>
@@ -28,3 +16,5 @@
 
 </div>
 {% endfor %}
+
+{% endblock %}

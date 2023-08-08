@@ -1,19 +1,9 @@
-<!DOCTYPE html>
-{% load static %}
-<html>
-    <head>
-        <title> SOCIAL NET</title>
-        <link rel="stylesheet" href="{% static 'main.css' %}">
-    </head>
-    <a href="/">MAIN |</a>
-    <a href="{% url 'shorts-list' %}">Shorts |</a>
-    <a href="{% url 'posts' %}">Posts |</a>
-    <a href="{% url 'saved_post_list' %}">Saved posts |</a>
-    <body>
+{% extends 'base.html' %}
+
+{% block content %}
 
 
-
-<h2> POST </h2>
+<div> <h2 class="container p-2 my-5 bg-dark text-white">POST </h2></div>
 <div> Author:
     <a href="{% url 'user_posts' post.creator.id %}">
        {{ post.creator.username }}
@@ -27,4 +17,6 @@
 <div> <h4> DESCRIPTION {{ post.description }} </h4> </div>
 
 <div> Likes {{ post.likes }}</div>
+
+{% endblock %}
 

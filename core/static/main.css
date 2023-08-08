@@ -1,8 +1,3 @@
-h1 {
-    color: white;
-    background: #00009c;
-}
-
 .post {
     height: 200px;
 }
@@ -12,4 +7,8 @@ h1 {
 
 .post:hover{
     background-color: #ddd;
+}
+
+.my-focus:hover {
+    font-size: 18px;
 }
