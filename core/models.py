@@ -67,6 +67,11 @@ class Comment(models.Model):
         to=Post,
         on_delete=models.CASCADE,
     )
+    created_by = models.ForeignKey(
+        to=User,
+        on_delete=models.CASCADE,
+        null=True, blank=False
+    )
     comment_text = models.TextField()
     likes_qty = models.IntegerField(default=0)
     created_at = models.DateTimeField(auto_now_add=True)

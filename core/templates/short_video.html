@@ -3,31 +3,26 @@
 {% block content %}
 
 <div> <h1 class="container p-2 my-5 bg-dark text-white">SHORT </h1> </div>
-{% for short in short_video_object %}
+
 
 <div class="alert alert-secondary">
-  <strong>
 
-<div> <h2>Created at: {{ short.created_at }}</h2></div>
 
-<div> <h2>Name: {{ short.video}}</h2> </div>
+    <div> <h2>Created at: {{ short.created_at }}</h2></div>
 
-<div><h2> Uploaded by: {{ short.user}}</h2></div>
+    <div> <h2>Name: {{ short.video}}</h2> </div>
 
-<div> <h2>Views: {{ short.views_qty }}</h2></div>
+    <div><h2> Uploaded by: {{ short.user}}</h2></div>
 
-  </strong>
+    <div> <h2>Views: {{ short.views_qty }}</h2></div>
+
 </div>
 
-    {{ short.video }}
+<br>
+    <video width="900" height="600" controls src="{{ short.video.url }}">
+      Your browser does not support the video tag.
+    </video>
 
-    {% for short_video in short.videofile_set.all %}
-        <video width="320" height="240" controls src="{{ post_videos.file.url }}">
-          Your browser does not support the video tag.
-        </video>
-    {%  endfor %}
-
-{%  endfor %}
 
 
 {% endblock %}

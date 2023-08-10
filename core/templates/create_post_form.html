@@ -1,0 +1,19 @@
+{% extends 'base.html' %}
+
+{% block content %}
+    <h2> Add POST </h2>
+    <form method="POST" enctype="multipart/form-data">
+        {% csrf_token %}
+        <p>
+            <input class="form-control form-control-sm" type="text" name="post_name">
+        </p>
+        <p>
+            <textarea class="form-control form-control-sm" name="description" cols="20" rows="5"></textarea>
+        </p>
+        <p>
+            <input class="form-control form-control-sm"  type="file" name="photo">
+        </p>
+        <button class="btn btn-dark">Save</button>
+    </form>
+
+{% endblock %}

@@ -1,8 +1,18 @@
-
+{% extends 'base.html' %}
+{% load django_bootstrap5 %}
+{% block content %}
 
 {% for short in short_lst %}
-<div>
-  <a href="{% url 'short_list' short.id %}">
-</a>
+
+<div class="alert alert-secondary">
+  <div> <h2 class="container p-1 my-2 bg-dark text-white"> SHORT {{ short.id }} </h2></div>
+  <div>
+  <a href="{% url 'short-info' short.id %}">
+    Short #{{ short.id }}
+  </a>
+  </div>
 </div>
 {% endfor %}
+
+
+{% endblock %}

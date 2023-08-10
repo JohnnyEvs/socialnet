@@ -28,11 +28,13 @@ urlpatterns = [
     path('profile/<int:id>/', profile_detail, name='profile'),
     path('category_info/', category_list),
     path('category_info/<int:id>/', category_detail),
-    path('short_video/', short_video, name='shorts-list'),
-    path('short_lst/<int:id>/', short_list),
+    path('short_video/<int:id>/', short_video, name='short-info'),
+    path('short_lst/', short_list, name='shorts-list'),
     path('saved_post_list/', saved_post_list, name='saved_post_list'),
     path('<int:user_id>/', user_post, name='user_posts'),
     path('posts/', post_list, name='posts'),
+    path('add-post/', create_post, name='add-post'),
+    path('add-short/', add_short, name='add-short'),
 
 
 ]

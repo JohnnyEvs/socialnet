@@ -1,14 +1,15 @@
 {% extends 'base.html' %}
-
+{% load django_bootstrap5 %}
 {% block content %}
 
-
 <div> <h2 class="container p-2 my-5 bg-dark text-white">POST </h2></div>
+{% if post.creator %}
 <div> Author:
     <a href="{% url 'user_posts' post.creator.id %}">
        {{ post.creator.username }}
     </a>
 </div>
+{% endif %}
 
 <div> <h3> HEADER {{ post.name }} </h3> </div>
 
@@ -17,6 +18,24 @@
 <div> <h4> DESCRIPTION {{ post.description }} </h4> </div>
 
 <div> Likes {{ post.likes }}</div>
+<br>
+<h3 class="container p-2 my-5 bg-dark text-white">Comments</h3>
+
+{% for comment in comments %}
+
+<div><b>{{ comment.created_by }} </b> {{ comment.comment_text}}</div>
+
+{%  endfor %}
+<br>
+<h3>Add comment</h3>
+<form method="POST">
+    {% csrf_token %}
+    {% bootstrap_form comment_form %}
+    <button class="btn btn-dark"> ADD</button>
+<br>
+
+
+</form>
 
 {% endblock %}
 
