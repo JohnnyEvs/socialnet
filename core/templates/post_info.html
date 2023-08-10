@@ -27,6 +27,24 @@
 
 {%  endfor %}
 <br>
+
+<div>
+    {% if post in request.user.savedposts.post.all %}
+    <form action="/remove-saved/" method="POST">
+        {% csrf_token %}
+        <input type="number" name="post_id" value="{{ post.id }}" hidden>
+        <button class="btn btn-danger"> Remove favorites</button></form>
+    {% else %}
+    <form action="/add-saved/" method="POST">
+        {% csrf_token %}
+        <input type="number" name="post_id" value="{{ post.id }}" hidden>
+    <button class="btn btn-dark"> SAVE favorites</button>
+    </form>
+    {% endif %}
+
+</div>
+
+<br>
 <h3>Add comment</h3>
 <form method="POST">
     {% csrf_token %}

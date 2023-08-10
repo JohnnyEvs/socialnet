@@ -35,6 +35,10 @@ urlpatterns = [
     path('posts/', post_list, name='posts'),
     path('add-post/', create_post, name='add-post'),
     path('add-short/', add_short, name='add-short'),
+    path('add-saved/', add_saved, name='add-saved'),
+    path('remove-saved/', remove_saved, name='remove-saved'),
+    path('registration/', register, name='register'),
+
 
 
 ]

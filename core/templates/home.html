@@ -1,5 +1,5 @@
 {% extends 'base.html' %}
-
+{% load django_bootstrap5 %}
 {% block content %}
 
     <h1   class="alert alert-dark">
@@ -7,6 +7,12 @@
     <div>
         <h1><span class="badge bg-secondary"> Start page </span></h1>
     </div>
+    <div>
+        <a href="/registration/"><button type="submit" class="btn btn-secondary">Sign up</button></a>
+
+    </div>
+
+
 
     <h3>Hello user, {{ name }}</h3>
 
@@ -42,7 +48,6 @@
         <div>
             <a href="{% url 'shorts-list' %}">Shorts</a>
         </div>
-
 
 
 {% endblock %}

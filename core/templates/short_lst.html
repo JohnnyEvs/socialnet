@@ -7,7 +7,10 @@
 <div class="alert alert-secondary">
   <div> <h2 class="container p-1 my-2 bg-dark text-white"> SHORT {{ short.id }} </h2></div>
   <div>
+    <hr>
   <a href="{% url 'short-info' short.id %}">
+    <video height="240px" src="{{ short.video.url}}">
+    </video>
     Short #{{ short.id }}
   </a>
   </div>

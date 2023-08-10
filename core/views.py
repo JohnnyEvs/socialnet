@@ -1,7 +1,6 @@
 from django.shortcuts import render, HttpResponse, redirect
 from .models import *
-from .forms import CommentForm
-
+from .forms import CommentForm, RegistrationUserForm
 
 
 # Create your views here.
@@ -32,6 +31,24 @@ def post_detail(request, id):
             new_comment.save()
             return HttpResponse('done')
 
+def add_saved(request):
+    if request.method == "POST":
+        post_id = request.POST['post_id']
+        post_object = Post.objects.get(id=post_id)
+        saved_post, created = SavedPosts.objects.get_or_create(user=request.user)
+        saved_post.post.add(post_object)
+        saved_post.save()
+        return redirect('/saved_post_list/')
+def remove_saved(request):
+    if request.method == "POST":
+        post_id = request.POST['post_id']
+        post_object = Post.objects.get(id=post_id)
+        saved_post = SavedPosts.objects.get(user=request.user)
+        saved_post.post.remove(post_object)
+        saved_post.save()
+        return redirect('/saved_post_list/')
+
+
 def post_list(request):
     context = {}
     post_list = Post.objects.all()
@@ -45,11 +62,14 @@ def saved_post_list(request):
     return render(request, 'saved_post_list.html', context)
 
 
-
 def profile_detail(request, id):
     context = {}
-    context['profile'] = Profile.objects.get(id=id)
+    profile = Profile.objects.get(id=id)
+    context['profile'] = profile
+    user_posts = Post.objects.filter(creator=profile.user)
+    context['user_posts'] = user_posts
     return render(request, 'profile_detail.html', context)
+
 
 def user_post(request, user_id):
     user = User.objects.get(id=user_id)
@@ -72,9 +92,6 @@ def category_list(request):
     context['category'] = category_info
     return render(request, 'category_lst.html', context)
 
-
-
-
 def add_short(request):
     if request.method == "GET":
         return render(request, 'short_form.html')
@@ -90,9 +107,11 @@ def short_video(request, id):
     short_video_object = Short.objects.get(id=id)
     return render(request, 'short_video.html', {'short': short_video_object})
 
+
 def short_list(request):
     short_lst = Short.objects.all()
     return render(request, 'short_lst.html', {'short_lst': short_lst})
+
 
 def create_post(request):
     if request.method == "GET":
@@ -108,11 +127,23 @@ def create_post(request):
         new_post.save()
         return HttpResponse('done')
 
-
-
 def contacts(request):
     return HttpResponse("Наши контакты")
 
 
 def about_us(request):
     return HttpResponse("Информация о нас!")
+
+
+def register(request):
+    if request.method == "POST":
+        form = RegistrationUserForm(request.POST)
+        if form.is_valid():
+            user = form.save(commit=False)
+            user.set_password(form.cleaned_data['password'])
+            user.save()
+            return redirect('/')
+            # return HttpResponse('You are the chosen one')
+    else:
+        form = RegistrationUserForm()
+    return render(request, 'registration.html', {'form': form})
