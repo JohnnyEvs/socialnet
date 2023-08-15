@@ -42,6 +42,7 @@ urlpatterns = [
     path('search/', search, name='search'),
     path('search-result/', search_result, name='search-result'),
     path('add-subscriber/<int:profile_id>/', add_subscriber, name='add-subscriber'),
+    path('remove-follower/<int:profile_id>/', remove_follower, name='remove-follower'),
 
 
 

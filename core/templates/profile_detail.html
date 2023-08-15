@@ -17,13 +17,14 @@
 </div>
 
 <p> {% if request.user in profile.subscriber.all %}
-    <form>
+    <form action="/remove-follower/{{ profile.id }}" method="POST">
+        {% csrf_token %}
         <button class="btn btn-danger">Cancel subscribe</button>
     </form>
     {% else %}
     <form action="/add-subscriber/{{ profile.id }}/" method="POST">
         {% csrf_token %}
-    <button class="btn btn-danger">Subscribe</button>
+        <button class="btn btn-danger">Subscribe</button>
     </form>
     {% endif %}
 </p>

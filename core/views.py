@@ -60,6 +60,13 @@ def add_subscriber(request, profile_id):
     messages.success(request, 'You are one of us')
     return redirect(f'/profile/{profile.id}/')
 
+def remove_follower(request, profile_id):
+    profile = Profile.objects.get(id=profile_id)
+    profile.subscriber.remove(profile_id)
+    profile.save()
+    messages.success(request, 'You are not follower')
+    return redirect(f'/profile/{profile.id}')
+
 
 def post_list(request):
     context = {}
