@@ -7,9 +7,30 @@
 
 <div>{{ profile.description }}</div>
 
+<div> <h1 class="container p-2 my-5 bg-dark text-white">USER Subscribers: {{ user.name }}</h1></div>
+<div>Subcribers count: {{ profile.subscriber.count }}</div>
+<div> Subscribers:</div>
+<div>
+    {% for user in profile.subscriber.all %}
+        <div>{{ user.username }}</div>
+    {% endfor %}
+</div>
+
+<p> {% if request.user in profile.subscriber.all %}
+    <form>
+        <button class="btn btn-danger">Cancel subscribe</button>
+    </form>
+    {% else %}
+    <form action="/add-subscriber/{{ profile.id }}/" method="POST">
+        {% csrf_token %}
+    <button class="btn btn-danger">Subscribe</button>
+    </form>
+    {% endif %}
+</p>
+
 <div> <h1 class="container p-2 my-5 bg-dark text-white">USER POSTS: {{ user.username }}</h1></div>
 <div class="row container">
-    {% for post in user_posts %}
+    {% for post in profile.user.posts.all  %}
         <div class="post col-lg-4 col-md-6">
             <a href="/posts/{{ post.id }}">
                 {{ post.name }}

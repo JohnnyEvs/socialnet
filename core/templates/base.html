@@ -25,11 +25,14 @@
                   <li class="nav-item">
                     <a class="nav-link my-focus" href="/">MAIN</a>
                   </li>
+                    <li class="nav-item">
+                    <a class="nav-link my-focus" href="{% url 'profile' request.user.profile.id %}">Profile</a>
+                  </li>
                   <li class="nav-item">
-                    <a class="nav-link my-focus" href="{% url 'shorts-list' %}">Shorts</a>
+                    <a class="nav-link my-focus" href="{% url 'shorts-list' %}">Reels</a>
                   </li>
                     <li class="nav-item">
-                    <a class="nav-link my-focus" href="{% url 'add-short' %}">Add Short</a>
+                    <a class="nav-link my-focus" href="{% url 'add-short' %}">Add Reel</a>
                   </li>
                   <li class="nav-item">
                     <a class="nav-link my-focus" href="{% url 'posts' %}">Posts</a>
@@ -42,6 +45,12 @@
                     <a class="nav-link my-focus" href="{% url 'add-post' %}">Addpost</a>
                   </li>
                     {% endif %}
+                    <li class="nav-item">
+                    <a class="nav-link my-focus" href="{% url 'sign-in' %}">Sign in</a>
+                  </li>
+                    <li class="nav-item">
+                    <a class="nav-link my-focus" href="{% url 'sign-out' %}">Sign out</a>
+                  </li>
                 </ul>
                 <form class="d-flex">
                   <input class="form-control me-2" type="text" placeholder="Search">
@@ -52,11 +61,32 @@
         </nav>
     <div class="row">
         <div class="col-2">
+            <div class="my-focus"><center>
+                {% if request.user.is.authenticated %}
+                HI, {{ request.user.username }}
+                {% else %}
+                Please sign in
+                {% endif %}</center>
+            </div>
             <div class="my-focus"><center>MAIN</center></div>
-            <div class="my-focus"><center>SEARCH</center></div>
+            <div class="my-focus"><center>
+                <a href="{% 'search' %)"> </a>SEARCH</center></div>
             <div class="my-focus"><center>POPULAR</center></div>
+
         </div>
     <div class="col-10">
+        {% if messages %}
+        <div class="col-9">
+            {% for message in messages %}
+            <div
+                {% if message.tags %}
+                 class="alert alert-{{ message.tags }}"
+                {% endif %}>
+                {{ message }}
+            </div>
+            {% endfor %}
+        </div>
+        {% endif %}
 
          {% block content %}
 

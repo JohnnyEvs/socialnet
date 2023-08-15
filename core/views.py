@@ -1,4 +1,7 @@
 from django.shortcuts import render, HttpResponse, redirect
+from django.contrib.auth.decorators import login_required
+from django.db.models import Q
+from django.contrib import messages
 from .models import *
 from .forms import CommentForm, RegistrationUserForm
 
@@ -6,9 +9,10 @@ from .forms import CommentForm, RegistrationUserForm
 # Create your views here.
 def homepage(request):
     context = {}
-    context['name'] = 'JE'
     posts_list = Post.objects.all()
     context['posts'] = posts_list
+    short_list = Short.objects.all()
+    context['shorts'] = short_list
     return render(request, 'home.html', context)
 
 
@@ -39,6 +43,7 @@ def add_saved(request):
         saved_post.post.add(post_object)
         saved_post.save()
         return redirect('/saved_post_list/')
+
 def remove_saved(request):
     if request.method == "POST":
         post_id = request.POST['post_id']
@@ -47,6 +52,13 @@ def remove_saved(request):
         saved_post.post.remove(post_object)
         saved_post.save()
         return redirect('/saved_post_list/')
+
+def add_subscriber(request, profile_id):
+    profile = Profile.objects.get(id=profile_id)
+    profile.subscriber.add(request.user)
+    profile.save()
+    messages.success(request, 'You are one of us')
+    return redirect(f'/profile/{profile.id}/')
 
 
 def post_list(request):
@@ -92,6 +104,8 @@ def category_list(request):
     context['category'] = category_info
     return render(request, 'category_lst.html', context)
 
+
+@login_required(login_url='users/sign-in/')
 def add_short(request):
     if request.method == "GET":
         return render(request, 'short_form.html')
@@ -126,6 +140,19 @@ def create_post(request):
         new_post.creator = request.user
         new_post.save()
         return HttpResponse('done')
+
+def search(request):
+    return render(request, 'search.html')
+
+def search_result(request):
+    key_word = request.GET['key_word']
+    # posts = Post.objects.filter(name__icontains=key_word)
+    posts = Post.objects.filter(
+        Q(name__icontains=key_word) |
+        Q(description__icontains=key_word)
+    )
+    context = {'posts': posts}
+    return render(request, 'home.html', context)
 
 def contacts(request):
     return HttpResponse("Наши контакты")

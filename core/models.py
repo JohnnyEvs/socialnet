@@ -8,6 +8,7 @@ class Profile(models.Model):
     user = models.OneToOneField(to=User, on_delete=models.CASCADE)
     nickname = models.CharField(max_length=55)
     description = models.TextField(null=True, blank=True)
+    subscriber = models.ManyToManyField(to=User, related_name='followed_user', blank=True)
 
 
 class Post(models.Model):
@@ -18,7 +19,7 @@ class Post(models.Model):
 
     name = models.CharField('Header', max_length=80)
     description = models.TextField('Description', null=True)
-    photo = models.ImageField('Photo', null=True, blank=True, upload_to='post_images/')
+    photo = models.ImageField('Photo', null=True, blank=False, upload_to='post_images/')
     status = models.CharField('Status', max_length=200, choices=STATUS_CHOICES, default="Posted")
     creator = models.ForeignKey(
         to=User,
@@ -26,7 +27,7 @@ class Post(models.Model):
         null=True,
         blank=False,
         verbose_name="Post author",
-        related_name='Posts'
+        related_name='posts'
     )
     category = models.ManyToManyField(
         to='Category', blank=True, verbose_name='Categories',
