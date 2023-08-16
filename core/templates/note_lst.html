@@ -1,0 +1,15 @@
+{% extends 'base.html' %}
+{% block content %}
+<h3>Your notifications</h3>
+<hr>
+{% for note in note_lst %}
+<div>
+
+    {{ note.text }}
+</div>
+
+{% endfor %}
+
+
+
+{% endblock %}

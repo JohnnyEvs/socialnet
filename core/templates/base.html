@@ -28,6 +28,11 @@
                     <li class="nav-item">
                     <a class="nav-link my-focus" href="{% url 'profile' request.user.profile.id %}">Profile</a>
                   </li>
+                    </li>
+                    <li class="nav-item">
+                    <a class="nav-link my-focus" href="{% url 'note_lst' %}">Notification -
+                        {{ request.user.notification_set.count }}</a>
+                    </li>
                   <li class="nav-item">
                     <a class="nav-link my-focus" href="{% url 'shorts-list' %}">Reels</a>
                   </li>

@@ -11,7 +11,7 @@
 
 <div> POST: {{ post.name }} </div>
 
-<div> AUTHOR {{ post.creator }}</div>
+<div><a href="{% url 'profile' post.creator.profile.id %}"> AUTHOR {{ post.creator }}</a></div>
 
 </div>
             {% if post.photo %}

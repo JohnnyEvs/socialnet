@@ -58,6 +58,11 @@ def add_subscriber(request, profile_id):
     profile.subscriber.add(request.user)
     profile.save()
     messages.success(request, 'You are one of us')
+    new_notification = Notification(
+        user = profile.user,
+        text = f'user {request.user.username} follow you'
+    )
+    new_notification.save()
     return redirect(f'/profile/{profile.id}/')
 
 def remove_follower(request, profile_id):
@@ -126,12 +131,21 @@ def add_short(request):
 
 def short_video(request, id):
     short_video_object = Short.objects.get(id=id)
+    short_video.views_qty += 1
+    short_video.save()
     return render(request, 'short_video.html', {'short': short_video_object})
 
 
 def short_list(request):
     short_lst = Short.objects.all()
     return render(request, 'short_lst.html', {'short_lst': short_lst})
+
+def show_notification(request):
+    note_lst = Notification.objects.filter(user=request.user)
+    for note in note_lst:
+        note.is_showed =True
+        note_lst.bulk_update(note_lst, ['is_showed'])
+    return render(request, 'note_lst.html', {'note_lst': note_lst})
 
 
 def create_post(request):

@@ -17,7 +17,7 @@
 </div>
 
 <p> {% if request.user in profile.subscriber.all %}
-    <form action="/remove-follower/{{ profile.id }}" method="POST">
+    <form action="/remove-follower/{{ profile.id }}/" method="POST">
         {% csrf_token %}
         <button class="btn btn-danger">Cancel subscribe</button>
     </form>
