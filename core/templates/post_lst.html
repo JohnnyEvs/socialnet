@@ -1,15 +1,17 @@
 {% extends 'base.html' %}
-
 {% block content %}
-
-
 {% for post in posts %}
 
 <div class="post">
 
   <div> <h2 class="container p-2 my-5 bg-dark text-white"> POST </h2></div>
 
-<div> POST: {{ post.name }} </div>
+        <div class="post col-lg-4 col-md-6">
+            <a href="/posts/{{ post.id }}">
+                {{ post.name }}
+            </a>
+
+        </div>
 
 <div><a href="{% url 'profile' post.creator.profile.id %}"> AUTHOR {{ post.creator }}</a></div>
 
@@ -20,12 +22,9 @@
                 </div>
             {% endif %}
 
-<div class="post">
 
-  <a href="/posts/">
-    {{ post.name }} </a>
 {% endfor %}
-  </div>
+
 
 {% endblock %}
 

@@ -8,7 +8,7 @@
 <div>{{ profile.description }}</div>
 
 <div> <h1 class="container p-2 my-5 bg-dark text-white">USER Subscribers: {{ user.name }}</h1></div>
-<div>Subcribers count: {{ profile.subscriber.count }}</div>
+<div> Subcribers count: {{ profile.subscriber.count }}</div>
 <div> Subscribers:</div>
 <div>
     {% for user in profile.subscriber.all %}

@@ -20,6 +20,10 @@ def post_detail(request, id):
     context = {}
     post_object = Post.objects.get(id=id)
     context['post'] = post_object
+    post_object.likes += 1
+    post_object.save()
+    # new_like = post_object.likes(message=f'user {request.user.username} likes your post')
+    # new_like.save()
     comment_form = CommentForm()
     context['comment_form'] = comment_form
     comments_list = Comment.objects.filter(post=post_object)
@@ -34,6 +38,7 @@ def post_detail(request, id):
             new_comment.post = post_object
             new_comment.save()
             return HttpResponse('done')
+
 
 def add_saved(request):
     if request.method == "POST":
@@ -130,10 +135,10 @@ def add_short(request):
         return redirect('short-info', id=new_short_object.id)
 
 def short_video(request, id):
-    short_video_object = Short.objects.get(id=id)
+    short_video = Short.objects.get(id=id)
     short_video.views_qty += 1
     short_video.save()
-    return render(request, 'short_video.html', {'short': short_video_object})
+    return render(request, 'short_video.html', {'short': short_video})
 
 
 def short_list(request):

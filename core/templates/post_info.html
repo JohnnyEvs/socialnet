@@ -17,7 +17,15 @@
 
 <div> <h4> DESCRIPTION {{ post.description }} </h4> </div>
 
-<div> Likes {{ post.likes }}</div>
+<div> Likes {{ post.likes }}
+    <form action="POST" >
+        <button class="btn btn-warning"> LIKE </button></form>
+    {% csrf_token %}
+
+</div>
+
+
+
 <br>
 <h3 class="container p-2 my-5 bg-dark text-white">Comments</h3>
 
