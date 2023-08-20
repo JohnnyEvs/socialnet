@@ -3,7 +3,7 @@ from django.contrib.auth.decorators import login_required
 from django.db.models import Q
 from django.contrib import messages
 from .models import *
-from .forms import CommentForm, RegistrationUserForm
+from .forms import CommentForm, RegistrationUserForm, ProfileForm, PostForm
 
 
 # Create your views here.
@@ -20,10 +20,6 @@ def post_detail(request, id):
     context = {}
     post_object = Post.objects.get(id=id)
     context['post'] = post_object
-    post_object.likes += 1
-    post_object.save()
-    # new_like = post_object.likes(message=f'user {request.user.username} likes your post')
-    # new_like.save()
     comment_form = CommentForm()
     context['comment_form'] = comment_form
     comments_list = Comment.objects.filter(post=post_object)
@@ -31,13 +27,47 @@ def post_detail(request, id):
     if request.method == "GET":
         return render(request, 'post_info.html', context)
     elif request.method == 'POST':
-        comment_form = CommentForm(request.POST)
+        if 'like' in request.POST:
+            post_object.likes += 1
+            post_object.save()
+            Notification.objects.create(
+                user=post_object.creator,
+                text=f'{request.user.username} likes your post {post_object.id}'
+            )
+        elif 'dislike' in request.POST:
+            post_object.likes -= 1
+            post_object.save()
+            Notification.objects.create(
+                user=post_object.creator,
+                text=f'{request.user.username} dislikes your post {post_object.id}'
+            )
+            return redirect(post_detail, id=id)
+        else:
+            comment_form = CommentForm(request.POST)
         if comment_form.is_valid():
-            new_comment = comment_form.save(commit=False)
-            new_comment.created_by = request.user
-            new_comment.post = post_object
-            new_comment.save()
-            return HttpResponse('done')
+           new_comment = comment_form.save(commit=False)
+           new_comment.created_by = request.user
+           new_comment.post = post_object
+           new_comment.save()
+           Notification.objects.create(
+               user=post_object.creator,
+               text=f'{request.user.username} Commented your post {post_object.id}'
+           )
+        return HttpResponse('done')
+
+def add_profile(request):
+    profile_form = ProfileForm()
+    context = {'profile_form': profile_form}
+    if request.method == 'POST':
+        profile_form = ProfileForm(request.POST, request.FILES)
+        if profile_form.is_valid():
+            profile_object = profile_form.save(commit=False)
+            profile_object.user = request.user
+            profile_object.save()
+            return redirect(profile_detail, id=profile_object.id)
+        else:
+            return HttpResponse('Not valid')
+    return render(request, 'add_profile.html', context)
 
 
 def add_saved(request):
@@ -134,9 +164,21 @@ def add_short(request):
         new_short_object.save()
         return redirect('short-info', id=new_short_object.id)
 
+def update_short(request, id):
+    short = Short.objects.get(id=id)
+    if request.method == "POST":
+        new_description = request.POST['description']
+        short.description = new_description
+        short.save()
+        return redirect(short_video, id=short.id)
+    context = {'short': short}
+    return render(request, 'update_short.html', context)
+
+
 def short_video(request, id):
     short_video = Short.objects.get(id=id)
     short_video.views_qty += 1
+    short_video.viewed_users.add(request.user)
     short_video.save()
     return render(request, 'short_video.html', {'short': short_video})
 
@@ -166,6 +208,28 @@ def create_post(request):
         new_post.creator = request.user
         new_post.save()
         return HttpResponse('done')
+
+def add_post_form(request):
+    if request.method == "POST":
+        post_form = PostForm(request.POST, request.FILES)
+        if post_form.is_valid():
+            post_object = post_form.save(commit=False)
+            post_object.creator = request.user
+            post_object.save()
+            return redirect(post_detail, id=post_object.id)
+        else:
+            messages.warning(request, 'Form is not valid')
+
+
+    post_form = PostForm()
+    context = {}
+    context['post_form'] = post_form
+    return render(request, 'create_post_dj_form.html', context)
+
+
+
+
+
 
 def search(request):
     return render(request, 'search.html')

@@ -16,8 +16,13 @@
 
     <div> <h2>Views: {{ short.views_qty }}</h2></div>
 
-</div>
+    <div> <h2>User unique views: {{ short.viewed_users.count }}</h2></div>
 
+</div>
+<div>
+    Description: {{ short.description }}
+</div>
+<a href="{% url 'update-short' short.id %}" class="btn btn-info"> Edit </a>
 <br>
     <video width="900" height="600" controls src="{{ short.video.url }}">
       Your browser does not support the video tag.

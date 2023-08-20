@@ -9,7 +9,21 @@ class Profile(models.Model):
     nickname = models.CharField(max_length=55)
     description = models.TextField(null=True, blank=True)
     subscriber = models.ManyToManyField(to=User, related_name='followed_user', blank=True)
-
+    photo = models.ImageField(upload_to='profile_photo/', null=True)
+    link_fb = models.CharField(max_length=255, null=True, blank=True)
+    photo = models.ImageField(
+        upload_to='profile_photo/',
+        null=True
+    )
+    link_fb = models.CharField(
+        max_length=255, null=True, blank=True
+    )
+    whatsapp = models.CharField(
+        max_length=30, null=True, blank=True
+    )
+    telegram = models.CharField(
+        max_length=55, null=True, blank=True
+    )
 
 class Post(models.Model):
     STATUS_CHOICES = (
@@ -17,8 +31,8 @@ class Post(models.Model):
         ('Unposted', 'Unposted')
     )
 
-    name = models.CharField('Header', max_length=80)
-    description = models.TextField('Description', null=True)
+    name = models.CharField('Header', max_length=80, null=True, blank=True)
+    description = models.TextField('Description', null=True, blank=True)
     photo = models.ImageField('Photo', null=True, blank=False, upload_to='post_images/')
     status = models.CharField('Status', max_length=200, choices=STATUS_CHOICES, default="Posted")
     creator = models.ForeignKey(
@@ -33,6 +47,7 @@ class Post(models.Model):
         to='Category', blank=True, verbose_name='Categories',
     )
     likes = models.PositiveIntegerField('Likes', default=0)
+
 
     def __str__(self):
         return f'{self.name} - {self.status}'
@@ -91,6 +106,12 @@ class Short(models.Model):
     video = models.FileField('Video', null=True, blank=False, upload_to='post_videos/')
     created_at = models.DateTimeField('Upload data', auto_now_add=True)
     views_qty = models.PositiveIntegerField('Views', default=0)
+    viewed_users = models.ManyToManyField(
+        to=User,
+        blank=True,
+        related_name='viewed_shorts'
+    )
+    description = models.CharField(max_length=255, null=True, blank=True)
 
     class Meta:
         verbose_name = 'Video'

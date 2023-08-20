@@ -25,9 +25,15 @@
                   <li class="nav-item">
                     <a class="nav-link my-focus" href="/">MAIN</a>
                   </li>
-                    <li class="nav-item">
+                     {% if request.user.profile %}
+                  <li class="nav-item">
                     <a class="nav-link my-focus" href="{% url 'profile' request.user.profile.id %}">Profile</a>
                   </li>
+                    {% else %}
+                    <div class="nav-link my-focus">  <a href="{% url 'add-profile' %}"> Add profile </a>
+                  </li>">
+                    </div>
+                    {% endif %}
                     </li>
                     <li class="nav-item">
                     <a class="nav-link my-focus" href="{% url 'note_lst' %}">Notification -
@@ -43,6 +49,9 @@
                     <a class="nav-link my-focus" href="{% url 'posts' %}">Posts</a>
                   </li>
                     {% if request.user.is_authenticated %}
+                    <div> <a class="nav-link my-focus"  href="{% url 'add-post-form' %}"> Add post(dj form) </a>
+                  </li>">
+                    </div>
                   <li class="nav-item">
                     <a class="nav-link my-focus" href="{% url 'saved_post_list' %}">SavedPosts</a>
                   </li>

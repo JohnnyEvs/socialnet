@@ -31,9 +31,11 @@ urlpatterns = [
     path('short_video/<int:id>/', short_video, name='short-info'),
     path('short_lst/', short_list, name='shorts-list'),
     path('saved_post_list/', saved_post_list, name='saved_post_list'),
+    path('update-short/<int:id>/', update_short, name='update-short'),
     path('<int:user_id>/', user_post, name='user_posts'),
     path('posts/', post_list, name='posts'),
     path('add-post/', create_post, name='add-post'),
+    path('add-post-form/', add_post_form, name='add-post-form'),
     path('add-short/', add_short, name='add-short'),
     path('add-saved/', add_saved, name='add-saved'),
     path('remove-saved/', remove_saved, name='remove-saved'),
@@ -43,7 +45,8 @@ urlpatterns = [
     path('search-result/', search_result, name='search-result'),
     path('add-subscriber/<int:profile_id>/', add_subscriber, name='add-subscriber'),
     path('remove-follower/<int:profile_id>/', remove_follower, name='remove-follower'),
-    path('note_lst/', show_notification, name='note_lst')
+    path('note_lst/', show_notification, name='note_lst'),
+    path('add-profile/', add_profile, name='add-profile'),
 
 
 
