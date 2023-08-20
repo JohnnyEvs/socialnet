@@ -39,6 +39,16 @@
 <div><b>{{ comment.created_by }} </b> {{ comment.comment_text}}</div>
 
 {%  endfor %}
+
+{% if request.user == post.creator %}
+    <p>
+        <form method="POST">
+            {% csrf_token %}
+            <input type="text" name="comment" value="{{ post.comment_text }}">
+        <a href="{% url 'edit-comment' post.id %}"><button class="btn btn-info"> Edit comment </button></a>
+        </form>
+    </p>
+{% endif %}
 <br>
 
 <div>
@@ -56,8 +66,16 @@
     {% endif %}
 
 </div>
-
 <br>
+{% if request.user == post.creator %}
+    <p>
+        <a href="{% url 'update-post' post.id %}"><button class="btn btn-info">Edit</button></a>
+    </p>
+    <p>
+        <a href="{% url 'delete-post' post.id %}"><button class="btn btn-danger">Delete</button></a>
+    </p>
+    <br>
+{% endif %}
 <h3>Add comment</h3>
 <form method="POST">
     {% csrf_token %}

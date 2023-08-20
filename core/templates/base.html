@@ -30,8 +30,9 @@
                     <a class="nav-link my-focus" href="{% url 'profile' request.user.profile.id %}">Profile</a>
                   </li>
                     {% else %}
-                    <div class="nav-link my-focus">  <a href="{% url 'add-profile' %}"> Add profile </a>
-                  </li>">
+                    <li>
+                    <div>
+                    <a class="nav-link my-focus" href="{% url 'add-profile' %}"> Add profile </a>
                     </div>
                     {% endif %}
                     </li>

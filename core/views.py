@@ -55,6 +55,32 @@ def post_detail(request, id):
            )
         return HttpResponse('done')
 
+def edit_comment(request, id):
+    context = {}
+    post_object = Post.objects.get(id=id)
+    context['comment_text'] = post_object
+    if request.user != post_object.creator:
+        return HttpResponse('No access')
+    if request.method == 'POST':
+        comment_form = PostForm(
+            data=request.POST,
+            instance=post_object
+        )
+        if comment_form.is_valid():
+            comment_form.save()
+            return redirect(post_detail, id=post_object.id)
+        if request.user != comment_text.creator:
+            return HttpResponse('No access')
+        comment_text.delete()
+        return redirect('homepage/')
+            else:
+                messages.warning(request, 'Form is not valid')
+                return render(request, 'edit_comment.html', context)
+    comment_form = PostForm(instance=comment_form)
+    context['comment_form'] = comment_form
+    return render(request, 'edit_comment.html', context)
+
+
 def add_profile(request):
     profile_form = ProfileForm()
     context = {'profile_form': profile_form}
@@ -119,6 +145,34 @@ def saved_post_list(request):
     posts = Post.objects.filter(saved_posts__user=request.user)
     context = {'posts': posts}
     return render(request, 'saved_post_list.html', context)
+
+def  update_post(request, id):
+    context = {}
+    post_object = Post.objects.get(id=id)
+    if request.user != post_object.creator:
+        return HttpResponse ('No access')
+    if request.method == 'POST':
+        post_form = PostForm(
+            data=request.POST,
+            files=request.FILES,
+            instance=post_object
+        )
+        if post_form.is_valid():
+            post_form.save()
+            return redirect(post_detail, id=post_object.id)
+        else:
+            messages.warning(request, 'Form is not valid')
+            return render(request, 'update_post.html', context)
+    post_form = PostForm(instance=post_object)
+    context['post_form'] = post_form
+    return render(request, 'update_post.html', context)
+
+def delete_post(request, id):
+    post = Post.objects.get(id=id)
+    if request.user != post.creator:
+        return HttpResponse ('No access')
+    post.delete()
+    return redirect(homepage)
 
 
 def profile_detail(request, id):
