@@ -22,6 +22,14 @@ class ProfileForm(forms.ModelForm):
             'whatsapp', 'telegram', 'photo'
         ]
 
+
+class ProfileEditForm(forms.ModelForm):
+    class Meta:
+        model = Profile
+        fields = [
+            'nickname', 'description'
+        ]
+
 class PostForm(forms.ModelForm):
     class Meta:
         model = Post

@@ -36,27 +36,15 @@
 
 {% for comment in comments %}
 
-<div><b>{{ comment.created_by }} </b> {{ comment.comment_text}}</div>
+<div><b>{{ comment.created_by }} </b> {{ comment.comment_text }}
+    {% if request.user == comment.created_by %}
+    <a href="{% url 'edit-comment' comment.id %}"><button class="btn btn-info"> Edit comment </button></a>
+    <a href="{% url 'delete-comment' comment.id %}"><button class="btn btn-info"> Delete comment </button></a>
+    {% endif %}
 
-{%  endfor %}
+</div>
+{% endfor %}
 
-{% if request.user == post.creator %}
-    <p>
-        <form method="POST">
-            {% csrf_token %}
-            <input type="text" name="comment" value="{{ post.comment_text }}">
-        <a href="{% url 'edit-comment' post.id %}"><button class="btn btn-info"> Edit comment </button></a>
-        </form>
-    </p>
-<br>
-    <p>
-        <form method="POST">
-            {% csrf_token %}
-            <input type="text" name="comment" value="{{ post.comment_text }}">
-        <a href="{% url 'delete-comment' post.id %}"><button class="btn btn-info"> Delete comment </button></a>
-        </form>
-    </p>
-{% endif %}
 <div>
     {% if post in request.user.savedposts.post.all %}
     <form action="/remove-saved/" method="POST">
@@ -73,15 +61,7 @@
 
 </div>
 <br>
-{% if request.user == post.creator %}
-    <p>
-        <a href="{% url 'update-post' post.id %}"><button class="btn btn-info">Edit</button></a>
-    </p>
-    <p>
-        <a href="{% url 'delete-post' post.id %}"><button class="btn btn-danger">Delete</button></a>
-    </p>
-    <br>
-{% endif %}
+
 <h3>Add comment</h3>
 <form method="POST">
     {% csrf_token %}

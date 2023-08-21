@@ -3,10 +3,28 @@ from django.contrib.auth.decorators import login_required
 from django.db.models import Q
 from django.contrib import messages
 from .models import *
-from .forms import CommentForm, RegistrationUserForm, ProfileForm, PostForm
+from django.views import View
+from .forms import CommentForm, RegistrationUserForm, ProfileForm, PostForm, ProfileEditForm
 
 
 # Create your views here.
+class NoContextView(View):
+    template_name = None
+    def get(self, request):
+        return render(request, self.template_name)
+class AboutView(NoContextView):
+    template_name = 'about.html'
+
+class FAQView(NoContextView):
+    template_name = 'faq.html'
+
+class StuffView(NoContextView):
+    template_name = 'stuff.html'
+
+class ContactsusView(NoContextView):
+    template_name = 'contactsus.html'
+
+
 def homepage(request):
     context = {}
     posts_list = Post.objects.all()
@@ -56,36 +74,29 @@ def post_detail(request, id):
         return HttpResponse('done')
 
 def edit_comment(request, id):
-    context = {}
-    post_object = Post.objects.get(id=id)
-    context['comment_text'] = post_object
-    if request.user != post_object.creator:
-        return HttpResponse('No access')
+    comment = Comment.objects.get(id=id)
+    if request.user != comment.created_by:
+        return redirect(post_detail)
     if request.method == 'POST':
-        comment_form = PostForm(
+        form = CommentForm(
             data=request.POST,
-            instance=post_object
+            instance=comment
         )
-        if comment_form.is_valid():
-            comment_form.save()
-            return redirect(post_detail, id=post_object.id)
-        if request.user != comment_text.creator:
-            return HttpResponse('No access')
-        comment_text.delete()
-        return redirect('/')
-        else:
-            messages.warning(request, 'Form is not valid')
-            return render(request, 'edit_comment.html', context)
-    comment_form = PostForm(instance=comment_form)
-    context['comment_form'] = comment_form
+        if form.is_valid():
+            form.save()
+            return redirect(post_detail, id=comment.post.id)
+    form = CommentForm(instance=comment)
+    context = {'form': form}
     return render(request, 'edit_comment.html', context)
 
+
 def delete_comment(request, id):
-    comment = Post.objects.get(id=id)
-    if request.user != post.creator:
-        return HttpResponse('No access')
+    comment = Comment.objects.get(id=id)
+    if request.user != comment.created_by:
+        return redirect(post_detail)
     comment.delete()
-    return redirect('/')
+    return redirect(post_detail, id=comment.post.id)
+
 
 def add_profile(request):
     profile_form = ProfileForm()
@@ -100,6 +111,22 @@ def add_profile(request):
         else:
             return HttpResponse('Not valid')
     return render(request, 'add_profile.html', context)
+
+
+def edit_profile(request, id):
+    profile = Profile.objects.get(id=id)
+    profile_form = ProfileForm(
+        instance=profile
+    )
+    context = {'profile_form': profile_form}
+    if request.method == 'POST':
+        profile_form = ProfileForm(instance=profile, data=request.POST, files=request.FILES)
+        if profile_form.is_valid():
+            profile_form.save()
+            return redirect(profile_detail, id=profile.id)
+    return render(request, 'update_profile.html', context)
+
+
 
 
 def add_saved(request):
@@ -305,7 +332,7 @@ def search_result(request):
     return render(request, 'home.html', context)
 
 def contacts(request):
-    return HttpResponse("Наши контакты")
+    return redirect('contactus')
 
 
 def about_us(request):

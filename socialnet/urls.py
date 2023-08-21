@@ -51,6 +51,11 @@ urlpatterns = [
     path('remove-follower/<int:profile_id>/', remove_follower, name='remove-follower'),
     path('note_lst/', show_notification, name='note_lst'),
     path('add-profile/', add_profile, name='add-profile'),
+    path('edit-profile/<int:id>/', edit_profile, name='edit-profile'),
+    path('about/', AboutView.as_view(), name='about'),
+    path('contactsus/', ContactsusView.as_view(), name='contactsus'),
+    path('faq/', FAQView.as_view(), name='faq'),
+    path('stuff/', StuffView.as_view(), name='stuff'),
 
 
 

@@ -5,7 +5,14 @@
 
 <div> <b>NICKNAME </b> {{profile.nickname}} </div>
 
+
+    <a href="{% url 'edit-profile' profile.id %}"> Edit profile </a>
+
+
+
 <div>{{ profile.description }}</div>
+
+
 
 <div> <h1 class="container p-2 my-5 bg-dark text-white">USER Subscribers: {{ user.name }}</h1></div>
 <div> Subcribers count: {{ profile.subscriber.count }}</div>
@@ -48,3 +55,4 @@
 
 
 {% endblock %}
+
