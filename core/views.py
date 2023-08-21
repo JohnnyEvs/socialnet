@@ -72,14 +72,20 @@ def edit_comment(request, id):
         if request.user != comment_text.creator:
             return HttpResponse('No access')
         comment_text.delete()
-        return redirect('homepage/')
-            else:
-                messages.warning(request, 'Form is not valid')
-                return render(request, 'edit_comment.html', context)
+        return redirect('/')
+        else:
+            messages.warning(request, 'Form is not valid')
+            return render(request, 'edit_comment.html', context)
     comment_form = PostForm(instance=comment_form)
     context['comment_form'] = comment_form
     return render(request, 'edit_comment.html', context)
 
+def delete_comment(request, id):
+    comment = Post.objects.get(id=id)
+    if request.user != post.creator:
+        return HttpResponse('No access')
+    comment.delete()
+    return redirect('/')
 
 def add_profile(request):
     profile_form = ProfileForm()

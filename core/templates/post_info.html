@@ -48,9 +48,15 @@
         <a href="{% url 'edit-comment' post.id %}"><button class="btn btn-info"> Edit comment </button></a>
         </form>
     </p>
-{% endif %}
 <br>
-
+    <p>
+        <form method="POST">
+            {% csrf_token %}
+            <input type="text" name="comment" value="{{ post.comment_text }}">
+        <a href="{% url 'delete-comment' post.id %}"><button class="btn btn-info"> Delete comment </button></a>
+        </form>
+    </p>
+{% endif %}
 <div>
     {% if post in request.user.savedposts.post.all %}
     <form action="/remove-saved/" method="POST">
