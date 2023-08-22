@@ -4,7 +4,7 @@
     <div class="row">
     {% for short in shorts %}
         <div class="col">
-            <a href="{% url 'short-info' short.id %}">
+            <a href="{% url 'short-info-cvb' short.id %}">
                 <div>
                     <video
                         class="custom-circle"
@@ -54,7 +54,7 @@
         </div>
     <h4> SHORTS </h4>
         <div>
-            <a href="{% url 'shorts-list' %}">Shorts</a>
+            <a href="{% url 'shorts-list-cvb' %}">Shorts</a>
         </div>
 
 {% endblock %}

@@ -1,0 +1,29 @@
+{% extends 'base.html' %}
+
+{% block content %}
+
+<div> <h1 class="container p-2 my-5 bg-dark text-white">SHORT </h1> </div>
+
+<div class="alert alert-secondary">
+    <div> <h2>Created at: {{ short.created_at }}</h2></div>
+
+    <div> <h2>Name: {{ short.video}}</h2> </div>
+
+    <div><h2> Uploaded by: {{ short.user}}</h2></div>
+
+    <div> <h2>Views: {{ short.views_qty }}</h2></div>
+
+    <div> <h2>User unique views: {{ short.viewed_users.count }}</h2></div>
+</div>
+<div>
+    Description: {{ short.description }}
+</div>
+<a href="{% url 'update-short' short.id %}" class="btn btn-info"> Edit </a>
+<br>
+    <video width="900" height="600" controls src="{{ short.video.url }}">
+      Your browser does not support the video tag.
+    </video>
+
+{% endblock %}
+
+

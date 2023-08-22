@@ -3,6 +3,7 @@ from django.contrib.auth.decorators import login_required
 from django.db.models import Q
 from django.contrib import messages
 from .models import *
+from django.views.generic import ListView
 from django.views import View
 from .forms import CommentForm, RegistrationUserForm, ProfileForm, PostForm, ProfileEditForm
 
@@ -71,7 +72,55 @@ def post_detail(request, id):
                user=post_object.creator,
                text=f'{request.user.username} Commented your post {post_object.id}'
            )
-        return HttpResponse('done')
+        return redirect(post_detail, id=id)
+
+class PostDetailView(View):
+    def get_context(self):
+        id = self.kwargs['id']
+        context = {}
+        post_object = Post.objects.get(id=id)
+        context['post'] = post_object
+        comment_form = CommentForm()
+        context['comment_form'] = comment_form
+        comments_list = Comment.objects.filter(post=post_object)
+        context['comments'] = comments_list
+        return context
+
+
+    def get(self, request, *args, **kwargs):
+        context = self.get_context()
+        return render(request, 'post_info.html', context)
+
+    def post(self, request, *args, **kwargs):
+        context = context = self.get_context()
+        post_object = context['post']
+        if 'like' in request.POST:
+            post_object.likes += 1
+            post_object.save()
+            Notification.objects.create(
+                user=post_object.creator,
+                text=f'{request.user.username} likes your post {post_object.id}'
+            )
+        elif 'dislike' in request.POST:
+            post_object.likes -= 1
+            post_object.save()
+            Notification.objects.create(
+                user=post_object.creator,
+                text=f'{request.user.username} dislikes your post {post_object.id}'
+            )
+        else:
+            comment_form = CommentForm(request.POST)
+            if comment_form.is_valid():
+                new_comment = comment_form.save(commit=False)
+                new_comment.created_by = request.user
+                new_comment.post = post_object
+                new_comment.save()
+                Notification.objects.create(
+                    user=post_object.creator,
+                    text=f'{request.user.username} Commented your post {post_object.id}'
+                )
+        return redirect('post-detail-cbv', id=post_object.id)
+
 
 def edit_comment(request, id):
     comment = Comment.objects.get(id=id)
@@ -96,6 +145,14 @@ def delete_comment(request, id):
         return redirect(post_detail)
     comment.delete()
     return redirect(post_detail, id=comment.post.id)
+
+
+class SubcsribesView(View):
+    def get(self, request, *args, **kwargs):
+        user_object = User.objects.get(id=kwargs['user_id'])
+        profiles_list = user_object.followed_user_profile.all()
+        context = {'profiles_list': profiles_list}
+        return render(request, 'subscribes.html', context)
 
 
 def add_profile(request):
@@ -172,6 +229,12 @@ def post_list(request):
     post_list = Post.objects.all()
     context['posts'] = post_list
     return render(request, 'post_lst.html', context)
+
+class PostListView(ListView):
+    queryset = Post.objects.all()
+    template_name = 'posts-list-cbv.html'
+
+
 
 
 def saved_post_list(request):
@@ -257,22 +320,40 @@ def update_short(request, id):
         new_description = request.POST['description']
         short.description = new_description
         short.save()
-        return redirect(short_video, id=short.id)
+        return redirect('short-info-cvb', id=short.id)
     context = {'short': short}
     return render(request, 'update_short.html', context)
 
 
-def short_video(request, id):
-    short_video = Short.objects.get(id=id)
-    short_video.views_qty += 1
-    short_video.viewed_users.add(request.user)
-    short_video.save()
-    return render(request, 'short_video.html', {'short': short_video})
+class Short_listView(View):
+    def get(self, request):
+        short_lst = Short.objects.all()
+        context = {'short_lst': short_lst}
+        return render(request, 'short-lst-cvb.html', context)
+
+class Short_videoView(View):
+    def get(self, request, id, *args, **kwargs):
+        id = self.kwargs['id']
+        short = Short.objects.get(id=id)
+        short.views_qty += 1
+        short.viewed_users.add(request.user)
+        short.save()
+        context = {"short": short}
+        return render(request, 'short_info-cvb.html', context)
 
 
-def short_list(request):
-    short_lst = Short.objects.all()
-    return render(request, 'short_lst.html', {'short_lst': short_lst})
+# def short_video(request, id):
+#     short_video = Short.objects.get(id=id)
+#     short_video.views_qty += 1
+#     short_video.viewed_users.add(request.user)
+#     short_video.save()
+#     return render(request, 'short_video.html', {'short': short_video})
+
+
+# def short_list(request):
+#     short_lst = Short.objects.all()
+#     return render(request, 'short_lst.html', {'short_lst': short_lst})
+
 
 def show_notification(request):
     note_lst = Notification.objects.filter(user=request.user)
@@ -280,6 +361,15 @@ def show_notification(request):
         note.is_showed =True
         note_lst.bulk_update(note_lst, ['is_showed'])
     return render(request, 'note_lst.html', {'note_lst': note_lst})
+
+class Show_notificationView(View):
+    def get_note(self, request):
+        note_lst = Notification.objects.filter(user=request.user)
+        for note in note_lst:
+            note.is_showed = True
+            note_lst.bulk_update(note_lst, ['is_showed'])
+        return render(request, 'note_lst.html', {'note_lst': note_lst})
+
 
 
 def create_post(request):
@@ -314,22 +404,34 @@ def add_post_form(request):
     return render(request, 'create_post_dj_form.html', context)
 
 
+# def search(request):
+#     return render(request, 'search.html')
+
+class SearchView(View):
+    def get(self, request):
+        return render(request, 'search.html')
 
 
+class Search_resultView(View):
+    def get(self, request):
+        key_word = request.GET['key_word']
+        # posts = Post.objects.filter(name__icontains=key_word)
+        posts = Post.objects.filter(
+            Q(name__icontains=key_word) |
+            Q(description__icontains=key_word)
+        )
+        context = {'posts': posts}
+        return render(request, 'home.html', context)
 
-
-def search(request):
-    return render(request, 'search.html')
-
-def search_result(request):
-    key_word = request.GET['key_word']
-    # posts = Post.objects.filter(name__icontains=key_word)
-    posts = Post.objects.filter(
-        Q(name__icontains=key_word) |
-        Q(description__icontains=key_word)
-    )
-    context = {'posts': posts}
-    return render(request, 'home.html', context)
+# def search_result(request):
+#     key_word = request.GET['key_word']
+#     # posts = Post.objects.filter(name__icontains=key_word)
+#     posts = Post.objects.filter(
+#         Q(name__icontains=key_word) |
+#         Q(description__icontains=key_word)
+#     )
+#     context = {'posts': posts}
+#     return render(request, 'home.html', context)
 
 def contacts(request):
     return redirect('contactus')

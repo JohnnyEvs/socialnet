@@ -41,7 +41,7 @@
                         {{ request.user.notification_set.count }}</a>
                     </li>
                   <li class="nav-item">
-                    <a class="nav-link my-focus" href="{% url 'shorts-list' %}">Reels</a>
+                    <a class="nav-link my-focus" href="{% url 'shorts-list-cvb' %}">Reels</a>
                   </li>
                     <li class="nav-item">
                     <a class="nav-link my-focus" href="{% url 'add-short' %}">Add Reel</a>
@@ -73,6 +73,9 @@
                     <a class="nav-link my-focus" href="{% url 'stuff' %}">Stuff</a>
                   </li>
                     <li class="nav-item">
+                    <a class="nav-link my-focus" href="{% url 'posts-list-cbv' %}">POSTS</a>
+                  </li>
+                    <li class="nav-item">
                     <a class="nav-link my-focus" href="{% url 'sign-in' %}">Sign in</a>
                   </li>
                     <li class="nav-item">
@@ -82,7 +85,9 @@
 
                 <form class="d-flex">
                   <input class="form-control me-2" type="text" placeholder="Search">
-                  <button class="btn btn-secondary" type="button">Search</button>
+                    <a href="{% url 'search-cvb' %}">
+                        <button class="btn btn-secondary" type="button">Search</button>
+                    </a>
                 </form>
               </div>
             </div>
@@ -98,7 +103,7 @@
             </div>
             <div class="my-focus"><center>MAIN</center></div>
             <div class="my-focus"><center>
-                <a href="{% 'search' %)"> </a>SEARCH</center></div>
+                <a href="{% 'search-cvb' %)"> </a>SEARCH</center></div>
             <div class="my-focus"><center>POPULAR</center></div>
 
         </div>

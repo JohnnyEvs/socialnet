@@ -1,0 +1,11 @@
+{% extends 'base.html' %}
+{% load django_bootstrap5 %}
+{% block content %}
+
+  {% for profile in profile_list %}
+  <div>
+    {{ profile.user.username}}
+  </div>
+  {% endfor %}
+
+{% endblock %}
