@@ -1,0 +1,29 @@
+{% extends 'base.html' %}
+{% load django_bootstrap5 %}
+{% block content %}
+  {% include 'includes/search_form.html' %}
+
+  {% for short in filter.qs %}
+
+  <div class="alert alert-secondary">
+    <div> <h2 class="container p-1 my-2 bg-dark text-white"> SHORT {{ short.id }} </h2></div>
+    <div>
+      <hr>
+    <a href="{% url 'short-info-cvb' short.id %}">
+      <video height="240px" src="{{ short.video.url}}">
+      </video>
+      Short #{{ short.id }}
+    </a>
+    </div>
+  </div>
+  {% endfor %}
+
+<hr>
+  <form method="get">
+    {% bootstrap_form filter.form  %}
+    <button class="btn btn-info">Apply</button>
+  </form>
+<hr>
+
+
+{% endblock %}

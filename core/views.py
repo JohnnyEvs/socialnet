@@ -2,10 +2,12 @@ from django.shortcuts import render, HttpResponse, redirect
 from django.contrib.auth.decorators import login_required
 from django.db.models import Q
 from django.contrib import messages
-from .models import *
-from django.views.generic import ListView
+from django.views.generic import ListView, DetailView
+from django_filters.views import FilterView
 from django.views import View
-from .forms import CommentForm, RegistrationUserForm, ProfileForm, PostForm, ProfileEditForm
+from .models import *
+from .forms import *
+from .filters import *
 
 
 # Create your views here.
@@ -234,6 +236,12 @@ class PostListView(ListView):
     queryset = Post.objects.all()
     template_name = 'posts-list-cbv.html'
 
+class PostListFilterView(FilterView):
+    model = Post
+    filterset_class = PostFilters
+    filterset_fields = ['id', 'creator', 'likes']
+    template_name = 'short-filter.html'
+
 
 
 
@@ -327,32 +335,51 @@ def update_short(request, id):
 
 class Short_listView(View):
     def get(self, request):
+        short_filter = ShortFilter(
+            request.GET,
+            queryset=Short.objects.all()
+        )
         short_lst = Short.objects.all()
         context = {'short_lst': short_lst}
-        return render(request, 'short-lst-cvb.html', context)
+        return render(request, 'short-lst-cvb.html', context, {'short_filter': short_filter})
 
-class Short_videoView(View):
-    def get(self, request, id, *args, **kwargs):
-        id = self.kwargs['id']
-        short = Short.objects.get(id=id)
-        short.views_qty += 1
-        short.viewed_users.add(request.user)
-        short.save()
-        context = {"short": short}
-        return render(request, 'short_info-cvb.html', context)
+class Short_videoView(DetailView):
+    queryset = Short.objects.all()
+    template_name = 'short_info-cvb.html'
+    def get(self, request, *args, **kwargs):
+
+        short_video = self.get_object()
+        short_video.views_qty += 1
+        if request.user.is_authenticated:
+            short_video.viewed_users.add(request.user)
+        short_video.save()
+        return super().get(request, *args, **kwargs)
+
+class ShortsFilterView(FilterView):
+    model = Short
+    filterset_class = ShortFilters
+    filterset_fields = ['id', 'creator', 'views_qty']
+    template_name = 'short-filter.html'
 
 
-# def short_video(request, id):
-#     short_video = Short.objects.get(id=id)
-#     short_video.views_qty += 1
-#     short_video.viewed_users.add(request.user)
-#     short_video.save()
-#     return render(request, 'short_video.html', {'short': short_video})
 
 
-# def short_list(request):
-#     short_lst = Short.objects.all()
-#     return render(request, 'short_lst.html', {'short_lst': short_lst})
+def short_video(request, id):
+    short_video = Short.objects.get(id=id)
+    short_video.views_qty += 1
+    if request.user.is_authenticated:
+        short_video.viewed_users.add(request.user)
+    short_video.save()
+    return render(request, 'short_video.html', {'short': short_video})
+
+
+def short_list(request):
+    short_filter = ShortFilter(
+        request.GET,
+        queryset=Short.objects.all()
+    )
+    short_lst = Short.objects.all()
+    return render(request, 'short_lst.html', {'short_lst': short_lst}, {'short_filter': short_filter} )
 
 
 def show_notification(request):

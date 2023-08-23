@@ -2,7 +2,15 @@
 {% load django_bootstrap5 %}
 {% block content %}
 
-{% for short in short_lst %}
+<hr>
+  <form method="get">
+    {{ bootstrap_form short_filter.form  % }}
+    <button class="btn btn-info">Use</button>
+  </form>
+<hr>
+
+
+{% for short in short_filter.qs %}
 
 <div class="alert alert-secondary">
   <div> <h2 class="container p-1 my-2 bg-dark text-white"> SHORT {{ short.id }} </h2></div>

@@ -1,0 +1,35 @@
+{% extends 'base.html' %}
+{% load django_bootstrap5 %}
+{% block content %}
+
+    {% include 'includes/search_form.html' %}
+
+      {% for post in filter.qs %}
+       <div class="post">
+           <div> <h2 class="container p-2 my-5 bg-dark text-white"> POST </h2></div>
+                <div class="post col-lg-4 col-md-6">
+                    <a href="/posts/{{ post.id }}">
+                        {{ post.name }}
+                    </a>
+                </div>
+             <div><a href="{% url 'profile' post.creator.profile.id %}"> AUTHOR {{ post.creator }}</a>
+             </div>
+       </div>
+    {% if post.photo %}
+        <div>
+            <img src="{{ post.photo.url}}" height="200px">
+        </div>
+    {% endif %}
+    <hr>
+      <form method="get">
+        {% bootstrap_form filter.form  %}
+        <button class="btn btn-info">Apply</button>
+      </form>
+    <hr>
+
+    {% endfor %}
+
+
+{% endblock %}
+
+
