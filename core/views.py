@@ -8,6 +8,7 @@ from django.views import View
 from .models import *
 from .forms import *
 from .filters import *
+import requests
 
 
 # Create your views here.
@@ -361,7 +362,36 @@ class ShortsFilterView(FilterView):
     filterset_fields = ['id', 'creator', 'views_qty']
     template_name = 'short-filter.html'
 
+class PostFromApi(View):
+    def get(self, request):
+        context = {}
+        response = requests.get('https://jsonplaceholder.typicode.com/posts')
+        data = response.json()
+        context['posts'] = data
+        return render(request, 'core/posts_from_api.html', context)
 
+class PostDetailFromApi(View):
+    def get(self, request, *args, **kwargs):
+        id = kwargs['id']
+        response = requests.get(f'https://jsonplaceholder.typicode.com/posts/{id}')
+        post_data = response.json()
+        return render(request, 'core/posts_detail_from_api.html', {'post': post_data})
+
+
+class TodoFromApi(View):
+    def get(self, request):
+        context = {}
+        response = requests.get('https://jsonplaceholder.typicode.com/todos/')
+        data = response.json()
+        context['todos'] = data
+        return render(request, 'core/todo_api.html', context)
+
+class TodoDetailFromApi(View):
+    def get(self, request, *args, **kwargs):
+        id = kwargs['id']
+        response = requests.get(f'https://jsonplaceholder.typicode.com/todos/{id}')
+        todo_data = response.json()
+        return render(request, 'core/todo-detail-api.html', {'todo':todo_data})
 
 
 def short_video(request, id):

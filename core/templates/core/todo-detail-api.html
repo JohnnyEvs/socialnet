@@ -1,0 +1,13 @@
+{% extends 'base.html' %}
+{% load django_bootstrap5 %}
+{% block content %}
+
+    {% include 'includes/search_form.html' %}
+
+
+    <div> <h3> HEADER {{ todo.title }} </h3> </div>
+    <hr>
+    <div> <h4> DESCRIPTION {{ todo.completed }} </h4> </div>
+
+
+{% endblock %}

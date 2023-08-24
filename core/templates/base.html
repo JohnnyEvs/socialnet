@@ -55,6 +55,12 @@
                   <li class="nav-item">
                     <a class="nav-link my-focus" href="{% url 'posts-list-filter' %}">Posts+</a>
                   </li>
+                    <li class="nav-item">
+                    <a class="nav-link my-focus" href="{% url 'posts-api' %}">PostsAPI</a>
+                  </li>
+                     <li class="nav-item">
+                    <a class="nav-link my-focus" href="{% url 'todo-api' %}">To do API</a>
+                  </li>
                     {% if request.user.is_authenticated %}
                     <div> <a class="nav-link my-focus"  href="{% url 'add-post-form' %}"> Add post(dj form) </a>
                   </li>">

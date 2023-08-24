@@ -1,0 +1,20 @@
+{% extends 'base.html' %}
+{% load django_bootstrap5 %}
+{% block content %}
+
+    {% include 'includes/search_form.html' %}
+
+      {% for todo in todos %}
+       <div class="post col-lg-12 col-md-2">
+       <div> <h2 class="container p-2 my-5 bg-dark text-white"> To do API</h2></div>
+
+           <a href="{% url 'todo-api' todo.id  %}">
+                     <b>{{ todo.title }} </b></a>
+
+
+       </div>
+       </div>
+    {% endfor %}
+
+
+{% endblock %}
