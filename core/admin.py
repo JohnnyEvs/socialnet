@@ -17,15 +17,15 @@ class PostAdmin(admin.ModelAdmin):
     inlines = [CommentInLine]
     list_editable = ['status']
 
-@admin.site.register(SavedPosts)
+@admin.register(SavedPosts)
 class SavedPosts(admin.ModelAdmin):
-    list_display = ['user', 'post']
-    search_fields = ['user', 'post']
+    list_display = ['user']
+    search_fields = ['user']
 
 
-@admin.site.register(Short)
+@admin.register(Short)
 class ShortAdmin(admin.ModelAdmin):
-    list_display = ['video', 'user', 'views_qty', 'viewed_users']
+    list_display = ['video', 'user', 'views_qty']
     list_filter = ['user', 'views_qty']
     search_fields = ['user', 'video']
 
